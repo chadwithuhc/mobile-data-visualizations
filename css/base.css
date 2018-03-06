@@ -1,0 +1,17 @@
+/*body { margin: 0 auto; width: 320px; display: block }*/
+body { margin: 0 }
+
+.clear { display: block; clear: both }
+/*@ webfonts */
+@font-face {font-family: UnitWeb-Light;src: url('fonts/unit/UnitWeb-Light.eot?');
+	src: url('fonts/unit/UnitWeb-Light.eot?#iefix') format('embedded-opentype'),
+	url('fonts/unit/UnitWeb-Light.woff') format('woff'),
+	url('fonts/unit/UnitComp-Light.ttf') format('truetype');}
+@font-face {font-family: UnitWeb-Medium;src: url('fonts/unit/UnitWeb-Medium.eot?');
+	src: url('fonts/unit/UnitWeb-Medium.eot?#iefix') format('embedded-opentype'),
+	url('fonts/unit/UnitWeb-Medium.woff') format('woff'),
+	url('fonts/unit/UnitComp-Medium.ttf') format('truetype');}
+@font-face {font-family: UnitWeb-Bold;src: url('fonts/unit/UnitWeb-Bold.eot?');
+	src: url('fonts/unit/UnitWeb-Bold.eot?#iefix') format('embedded-opentype'),
+	url('fonts/unit/UnitWeb-Bold.woff') format('woff'),
+	url('fonts/unit/UnitComp-Bold.ttf') format('truetype');font-weight: bold;}

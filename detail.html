@@ -1,0 +1,294 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <style type="text/css">
+        @import 'css/base.css';
+        #credit-score-detail-panel { background: url(images/bg-pattern-rpt-1.jpg); font: 62.5%/1em UnitWeb-Light,Arial,sans-serif; color: #4c4c4c; text-shadow: 1px 1px 1px #fff }
+        #credit-score-detail-panel .title { font-size: 2em; line-height: 1em; font-family: UnitComp-Bold,UnitWeb-Bold,Arial,sans-serif; margin: 0 }
+
+        .panel-pad { padding: 15px }
+        hr.sep { border: 0; border-top: solid 1px #d7d7d7; border-bottom: solid 1px #f8f8f8; height: 0; display: block; clear: both; margin: 0 }
+
+        #score-panel #score-rating,
+        #score-panel #score-change { font-size: 1.4em; line-height: 1em; color: #999; font-family: UnitWeb-Light,Arial,sans-serif; }
+        #score-panel .left { width: 75%; float: left }
+        #score-panel .right { float: left; width: 20%; margin: 0 0 0 4%; text-align: center }
+        #score-panel #score { font-size: 3em; line-height: 1em; font-family: UnitComp-Bold,UnitWeb-Bold,Arial,sans-serif; letter-spacing: -2px; display: block }
+        #score-panel .right strong { font-family: UnitComp-Bold,UnitWeb-Medium,Arial,sans-serif; font-weight: normal }
+
+        #score-factors .title { cursor: pointer; }
+        #score-factors .toggle { float: right; font-size: .8em }
+        #score-factors.expanded .toggle {-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-ms-transform: rotate(90deg);-o-transform: rotate(90deg);filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1); }
+        #score-factors #factor-info { font-size: 1.4em; line-height: 1em; color: #909090; margin-top: 1em; display: none }
+        #score-factors.expanded #factor-info { display: block }
+        #score-factors #factor-info strong { color: #666; font-family: UnitWeb-Medium,Arial,sans-serif; font-weight: normal }
+        #score-factors #factor-info p { margin: 0; padding: 0 0 .4em; line-height: 1em }
+
+        #graph { background: url(images/graph-detail-bg.jpg) repeat-x 40px -8px; position: relative; overflow: hidden }
+        #points { position: relative; /*overflow: auto;*/ z-index: 12 }
+        #points-wrap { width: 5000px; visibility: hidden }
+        #graph .col { width: 40px; display: inline-block; vertical-align: top; float: left }
+        #graph .points { background: #242424; font-size: 1.2em; font-family: UnitWeb-Medium,Arial,sans-serif; color: #fff; text-shadow: 1px 1px 0 #000; text-align: center; }
+        #graph .points .y-point { padding: 1em 0; height: 1em; display: block; position: relative }
+        #graph .points .y-point .line { border-top: solid 1px #3d3d3d; border-bottom: solid 1px #515151; position: absolute; top: 45%; left: 100%; width: 5000px }
+        #graph .point-graph { height: 18em; display: block; text-align: center; position: relative; overflow: hidden }
+        #graph .point-graph .point { color: #fff; width: 1em; height: 1em; border-radius: 1em; display: block; margin: 0 auto; position: relative }
+        #graph .point-graph .point .score { font-size: 1.4em; position: relative; top: -1em; left: -50%; font-family: UnitWeb-Bold,Arial,sans-serif; text-shadow: 1px 1px 0 #000; margin-left: -2px }
+        #graph .point-graph .point .score.under { top: 1.2em }
+        #graph .col .date { font-family: UnitWeb-Medium,Arial,sans-serif; color: #fff; text-shadow: 1px 1px 0 #000; height: 35px; width: inherit; display: block; font-size: 1.4em; line-height: 1em; text-align: center; vertical-align: middle; position: relative; z-index: 12 }
+        #graph .col .date .align { display: table-cell; height: inherit; width: inherit; vertical-align: middle; text-align: center }
+        #detail-graph #legend .key { float: left; width: 30%; margin: 1em 0 0 3%; font-size: 1.2em; line-height: 1em }
+        #detail-graph #legend .key .color { display: block; float: left; margin-right: 5px; width: 2em; height: 2em; vertical-align: middle }
+        .s800 { background-color: #0074b3 }
+        .s800b { background-color: #0074b3; border: solid 2px #011f2f }
+        .s750 { background-color: #006840 }
+        .s750b { background-color: #006840; border: solid 2px #002f1d }
+        .s700 { background-color: #00ff6b }
+        .s700b { background-color: #00ff6b; border: solid 2px #008437 }
+        .s650 { background-color: #fdac5d }
+        .s650b { background-color: #fdac5d; border: solid 2px #5c3004 }
+        .s600 { background-color: #ff001c }
+        .s600b { background-color: #ff001c; border: solid 2px #560009 }
+        .srisk { background-color: black }
+        .sriskb { background-color: black; border: solid 2px #001e2f }
+
+        #info p { color: #666; font-size: 1.4em; line-height: 1em }
+    </style>
+</head>
+<body>
+
+<section id="credit-score-detail-panel">
+    <section id="score-panel" class="panel-pad">
+        <div class="left">
+            <h1 class="title">TransUnion Credit Score</h1>
+            <p id="score-rating">You score above 78% of the population</p>
+        </div>
+        <p class="right">
+            <span id="score">765</span>
+            <span id="score-change"><strong id="score-point-change">+3</strong> Points since <strong id="score-date">Jun</strong></span>
+        </p>
+    </section>
+
+    <hr class="sep" />
+
+    <section id="score-factors" class="panel-pad">
+        <h1 class="title">Score Factors: <span class="toggle">&#9654;</span></h1>
+        <div id="factor-info">
+            <p><strong>Factor 1:</strong> Bankcard account balances are too high in proportion to credit limits</p>
+            <p><strong>Factor 2:</strong> Revolving account balances are too high in proportion to credit limits</p>
+            <p><strong>Factor 3:</strong> Too many accounts with a balance</p>
+        </div>
+    </section>
+
+    <section id="detail-graph">
+        <div id="graph">
+            <!-- score col -->
+            <div class="points col">
+                <span class="y-point">800<span class="line"></span></span>
+                <span class="y-point">750<span class="line"></span></span>
+                <span class="y-point">700<span class="line"></span></span>
+                <span class="y-point">650<span class="line"></span></span>
+                <span class="y-point">600<span class="line"></span></span>
+            </div>
+
+            <div id="points">
+                <div id="points-wrap">
+                    <!-- month cols -->
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="799"></span></span>
+                        <span class="date"><span class="align">Oct</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="799"></span></span>
+                        <span class="date"><span class="align">Nov</span></span>
+                    </div>
+
+
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="580"></span></span>
+                        <span class="date"><span class="align">Dec<br/>2012</span></span>
+                    </div>
+
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="600"></span></span>
+                        <span class="date"><span class="align">Jan<br/>2013</span></span>
+                    </div>
+
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="650"></span></span>
+                        <span class="date"><span class="align">Feb</span></span>
+                    </div>
+
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="670"></span></span>
+                        <span class="date"><span class="align">Mar</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="750"></span></span>
+                        <span class="date"><span class="align">Apr</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="780"></span></span>
+                        <span class="date"><span class="align">May</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="780"></span></span>
+                        <span class="date"><span class="align">Jun</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="780"></span></span>
+                        <span class="date"><span class="align">Jul</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="780"></span></span>
+                        <span class="date"><span class="align">Aug</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="780"></span></span>
+                        <span class="date"><span class="align">Sep</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="780"></span></span>
+                        <span class="date"><span class="align">Oct</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="780"></span></span>
+                        <span class="date"><span class="align">Nov</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="780"></span></span>
+                        <span class="date"><span class="align">Dec<br/>2013</span></span>
+                    </div>
+                    <div class="col">
+                        <span class="point-graph"><span class="point" data-score="780"></span></span>
+                        <span class="date"><span class="align">Jan<br/>2014</span></span>
+                    </div>
+
+                    <span class="clear"></span>
+                </div>
+            </div> <!-- #points -->
+
+        </div> <!-- #graph -->
+        <div id="legend" class="panel-pad">
+            <p class="key"><span class="color s800"></span> &#8805; 800<br/>Excellent</p>
+            <p class="key"><span class="color s750"></span> 750-799<br/>Very Good</p>
+            <p class="key"><span class="color s700"></span> 700-749<br/>Good</p>
+            <p class="key"><span class="color s650"></span> 650-699<br/>Fair</p>
+            <p class="key"><span class="color s600"></span> 600-649<br/>Poor</p>
+            <p class="key"><span class="color srisk"></span> &#60; 600<br/>High Risk</p>
+            <span class="clear"></span>
+        </div>
+    </section>
+
+    <hr class="sep" />
+
+    <section id="info" class="panel-pad">
+        <h1 class="title">How to read score:</h1>
+        <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Aenean lacinia bibendum nulla sed consectetur. mollis, est vet</p>
+    </section>
+
+</section>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    jQuery(function($) {
+        $('#score-factors').bind('click', function (e) {
+            $(this).toggleClass('expanded');
+        });
+
+        function getPointClass(point) {
+            var score = 0;
+
+            if (point >= 800) {
+                score = 800;
+            }
+            else if (point >= 750) {
+                score = 750;
+            }
+            else if (point >= 700) {
+                score = 700;
+            }
+            else if (point >= 650) {
+                score = 650;
+            }
+            else if (point >= 600) {
+                score = 600;
+            }
+            else {
+                score = 'risk';
+            }
+
+            return 's' + score + 'b';
+        }
+
+        function getPointEl(point) {
+            var classes = 'score';
+            if (point > 790) {
+                classes += ' under'
+            }
+            return $('<span/>', { class: classes, text: point });
+        }
+        // graph
+        $.fn.graph = function(options) {
+
+            var defaults = {
+                high: 100,
+                low: 0,
+                points: 100,
+                adjustment: 0,
+                // calculated later
+                point_ratio: 1
+            };
+
+            var config = $.extend({}, defaults, options),
+                    $els = (config.find) ? this.find(config.find) : this;
+
+            // points per pixel
+            config.point_ratio = (config.points / (config.high - config.low));
+
+            // get the plot location
+            function plot(score) {
+                var location = config.points - ((score - config.low) * config.point_ratio) + config.adjustment;
+                return location;
+            }
+
+            // final loop through
+            $els.each(function () {
+                var $el = $(this),
+                        point = $el.attr('data-score');
+
+                $el.css({ top: plot(point) }).addClass(getPointClass(point)).append(getPointEl(point));
+            });
+
+            if (typeof config.callback === 'function') {
+                config.callback.call(this);
+            }
+        };
+
+        $('#graph').find('.point').each(function() {
+            var min = 590, max = 830,
+                    num = min + Math.floor(Math.random() * (max - min + 1));
+            $(this).attr('data-score', num);
+        }).end().graph({
+            find: '.point',
+            high: 827,
+            low: 579,
+            points: 180,
+            adjustment: (-7)+(-3),
+            callback: function () {
+                var $points_wrap = this.find('#points-wrap');
+                var $points = $points_wrap.find('.col');
+
+                if ($points.length > 7) {
+                    $points_wrap.css({ width: $points.length * $points.eq(0).outerWidth(), overflow: 'auto' });
+                    new iScroll('points', { hScroll: true, hScrollbar: false, vScroll: false, vScrollbar: false });
+                }
+                $points_wrap.css({ visibility: 'visible' });
+            }
+        });
+    });
+</script>
+<script type="application/javascript" src="js/iscroll-lite.js"></script>
+</body>
+</html>

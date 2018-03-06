@@ -1,0 +1,28 @@
+/*
+	UnitWeb Font
+	Copyright WebFontFont
+*/
+
+/*@ light */
+/* first for Internet Explorer < 9 */
+@font-face {
+	font-family: UnitWeb-Light;
+	src: url("UnitWeb-Light.eot");
+}
+/* then for WOFF-capable browsers */
+@font-face {
+	font-family: UnitWeb-Light;
+	src: url("UnitWeb-Light.woff") format("woff");
+}
+
+/*@ bold */
+@font-face {
+	font-family: UnitWeb-Bold;
+	src: url("UnitWeb-Bold.eot");
+	font-weight: bold;
+}
+@font-face {
+	font-family: UnitWeb-Bold;
+	src: url("UnitWeb-Bold.woff") format("woff");
+	font-weight: bold;
+}
